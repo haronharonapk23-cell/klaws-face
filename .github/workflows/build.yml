@@ -15,7 +15,23 @@ jobs:
         with:
           gradle-version: 8.7
       - name: Unzip project
-        run: unzip -q klaws-face-step1.zip -d proj
+        run: |
+          mkdir proj
+          for z in $(ls *.zip | sort -V); do unzip -o -q "$z" -d proj; done
+      - name: Extract emap
+        run: |
+          pip install onnx numpy
+          mkdir -p proj/app/src/main/assets
+          curl -L --fail -o inswapper_128.onnx https://huggingface.co/ezioruan/inswapper_128.onnx/resolve/main/inswapper_128.onnx || curl -L --fail -o inswapper_128.onnx https://huggingface.co/countfloyd/deepfake/resolve/main/inswapper_128.onnx
+          python3 -c "
+          import onnx, numpy as np
+          from onnx import numpy_helper
+          m = onnx.load('inswapper_128.onnx')
+          e = numpy_helper.to_array(m.graph.initializer[-1]).astype('float32')
+          print(e.shape)
+          assert e.shape == (512, 512)
+          e.tofile('proj/app/src/main/assets/emap.bin')
+          "
       - name: Build debug APK
         run: gradle -p proj assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
