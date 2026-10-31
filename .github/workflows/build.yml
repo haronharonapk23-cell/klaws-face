@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Unzip project (step5)
-        run: unzip -o klaws-face-step5.zip
+        run: unzip -o klaws-face-v0_8.zip
       - name: Make emap.bin from the swapper model
         run: |
           pip install onnx numpy
