@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Unzip project (step5)
-        run: unzip -o klaws-face-v0_13.zip -d /tmp/kf && cp -a "$(dirname "$(find /tmp/kf -name 'settings.gradle*' | head -1)")"/. .
+        run: unzip -o klaws-face-v0_14.zip -d /tmp/kf && cp -a "$(dirname "$(find /tmp/kf -name 'settings.gradle*' | head -1)")"/. .
       - name: Make emap.bin from the swapper model
         run: |
           pip install onnx numpy
